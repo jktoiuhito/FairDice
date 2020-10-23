@@ -5,7 +5,7 @@
    "type": "module",
    "description": "Fair and functional digital dice for any dice-based game",
    "scripts": {
-      "clean": "rd /s /q lib || exit 0",
+      "clean": "rd /s /q build || exit 0",
       "build": "npm run clean && tsc && npx webpack"
    },
    "repository": {

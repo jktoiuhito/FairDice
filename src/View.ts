@@ -4,6 +4,7 @@ const enum Id {
    Dice = "dice",
    Results = "results",
    Controls = "controls",
+   BenchmarkButton = "button-benchmark",
    PreviousButton = "button-previous",
    NextButton = "button-next",
    NewThrowButton = "button-new",
@@ -17,6 +18,7 @@ export default class View {
    private readonly Results: HTMLDivElement;
    private readonly Controls: HTMLElement; // <footer>
 
+   private readonly BenchmarkButton: HTMLButtonElement;
    private readonly PreviousButton: HTMLButtonElement;
    private readonly NextButton: HTMLButtonElement;
    private readonly NewThrowButton: HTMLButtonElement;
@@ -26,6 +28,9 @@ export default class View {
       this.Dice = this.GetElementById<HTMLDivElement>(Id.Dice);
       this.Results = this.GetElementById<HTMLDivElement>(Id.Results);
       this.Controls = this.GetElementById<HTMLElement>(Id.Controls);
+      this.BenchmarkButton = this.GetElementById<HTMLButtonElement>(
+         Id.BenchmarkButton
+      );
       this.PreviousButton = this.GetElementById<HTMLButtonElement>(
          Id.PreviousButton
       );
@@ -38,6 +43,7 @@ export default class View {
       this.Dice.hidden = false;
       this.Results.hidden = false;
       this.Controls.hidden = false;
+      this.BenchmarkButton.hidden = false;
 
       // Add event listeners to buttons (temporary!)
       this.PreviousButton.addEventListener("click", () => {
@@ -48,6 +54,9 @@ export default class View {
       });
       this.NewThrowButton.addEventListener("click", () => {
          console.log("new throw");
+      });
+      this.BenchmarkButton.addEventListener("click", () => {
+         console.log("benchmark");
       });
    }
 
