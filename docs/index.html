@@ -82,29 +82,13 @@
                id="dice"
                class="d-flex flex-wrap justify-content-center"
                hidden
-            >
-               <!-- Example value, remove when done -->
-               <button
-                  type="button"
-                  class="btn btn-primary m-2"
-                  style="width: 4em"
-               >
-                  <p class="m-0 p-0">d4</p>
-                  <p class="badge m-0 p-0">1</p>
-               </button>
-            </div>
+            ></div>
             <hr />
             <div
                id="results"
                class="d-flex flex-wrap mt-4 justify-content-center"
                hidden
-            >
-               <!-- Example value, remove when done -->
-               <div class="card m-1" style="width: 4em; height: 4em">
-                  <h5 class="badge text-muted">d4</h5>
-                  <span>3</span>
-               </div>
-            </div>
+            ></div>
          </div>
       </main>
       <footer
@@ -126,7 +110,7 @@
             class="btn btn-primary mx-2"
             disabled
          >
-            New throw
+            New roll
          </button>
          <button
             type="button"
@@ -138,16 +122,4 @@
          </button>
       </footer>
    </body>
-   <template id="dice-button">
-      <button type="button" class="btn btn-primary m-2" style="width: 4em">
-         <p class="m-0 p-0">D<slot name="eye-count">0</slot></p>
-         <p class="badge m-0 p-0"><slot name="throw-count">-1</slot></p>
-      </button>
-   </template>
-   <template id="dice-result">
-      <div class="card m-1" style="width: 4em; height: 4em">
-         <h5 class="badge text-muted">d<slot name="eye-count">0</slot></h5>
-         <span><slot name="roll">-1</slot></span>
-      </div>
-   </template>
 </html>
