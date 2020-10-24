@@ -3,7 +3,7 @@ import Rolls from "./Rolls";
 import Roll from "./Roll";
 
 /**
- * Object responsible for throwing the dice and keeping track of history.
+ * Object responsible for rolling the dice and keeping track of history.
  */
 export default class Model {
    // Cannot be readonly type.
@@ -20,7 +20,7 @@ export default class Model {
    }
 
    /**
-    *
+    * Register a function to call each time the state of current rolls changes.
     * @param callback Function to call when the current rolls change.
     */
    public readonly onCurrentRollsChange = (
@@ -36,7 +36,7 @@ export default class Model {
    };
 
    /**
-    * Roll a dice.
+    * Roll a dice and add it to the current rolls.
     * @param facecount Facecount of the dice.
     */
    public readonly Roll = (facecount: number): void => {
@@ -87,25 +87,23 @@ export default class Model {
        * 2 6 10 % max -> 2
        * 3 7 11 % max -> 3
        *
-       * Maximum value generated is 2^32 (or 2^32 - 1). The chances that this
-       * number is exactly at the border of a "block" (its modulo operation with
-       * max would produce max - 1) is nonexistent. Therefore there is a very
-       * small amount of numbers which can be generated more frequently than
+       * Maximum value generated is 2^32 (or 2^32 - 1). There is no guaranty
+       * that this number is exactly at the border of a "block" (its modulo
+       * operation with max would produce max - 1) is. Therefore there is a very
+       * small chance that some numbers can be generated more frequently than
        * others. To eliminate this possibility, the maximum number should be
-       * 2^32 - (2^32 % max) - 1.
+       * 2^32 - (2^32 % max) - 1, which % max is always max - 1.
        */
       const array = new Uint32Array(1);
       const maxValue = 2 ** 32 - (2 ** 32 % max) - 1;
-      // ...
+      // ...what else should be used?
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition,no-constant-condition
       while (true) {
          window.crypto.getRandomValues(array);
-         const val = array[0];
-         if (val <= maxValue) {
+         if (array[0] <= maxValue) {
             break;
          }
       }
-      const value = array[0];
-      return (value % max) + 1;
+      return (array[0] % max) + 1;
    };
 }
