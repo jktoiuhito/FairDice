@@ -12,7 +12,7 @@ export default class Roll {
 
    /**
     * What was the rolled value.
-    * Is never under one or over the eye-count of the dice.
+    * Is never under one or over the facecount of the dice.
     */
    public readonly Value: number;
 
@@ -29,7 +29,7 @@ export default class Roll {
       } else if (Assert(value).isNumber.isNotNaN.isSafeInteger.value < 1) {
          throw new Error("'facecount' cannot be under one");
       } else if (value > facecount) {
-         throw new Error("'value' cannot be greater than 'dice'");
+         throw new Error("'value' cannot be greater than 'facecount'");
       }
       this.Facecount = facecount;
       this.Value = value;

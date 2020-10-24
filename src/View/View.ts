@@ -61,6 +61,9 @@ export default class View {
       ControlsContainer.hidden = false;
       BenchmarkButton.hidden = false;
       this.ScoreCounter.hidden = false;
+      // is never null.
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      document.querySelector("hr")!.hidden = false;
 
       // Register model event listener
       model.onCurrentRollsChange(this.DisplayCurrentRolls);
