@@ -13,10 +13,9 @@ export default class Model {
    private CurrentRolls: Rolls;
 
    public constructor() {
-      //TODO: load history from browser storage.
-      this.History = [];
       this.Listeners = [];
       this.CurrentRolls = new Rolls([]);
+      this.History = [];
       this.History.push(this.CurrentRolls);
    }
 
@@ -42,22 +41,23 @@ export default class Model {
     */
    public readonly Roll = (dice: number): void => {
       // TODO: crypto rng
-      // TODO: save to browser storage
       this.CurrentRolls.Rolls.push(new Roll(dice, 1));
       this.Changed(this.CurrentRolls);
    };
 
    /**
-    * Saves current rolls to the head of history and clears them.
+    * Saves current rolls to the head of history and then resets them.
     */
    public readonly Reset = (): void => {
-      const old = this.CurrentRolls;
-      const neww = new Rolls([]);
-      old.Next = neww;
-      neww.Previous = old;
-      Object.freeze(old);
-      this.History.push(neww);
-      this.CurrentRolls = neww;
+      if (this.CurrentRolls.Rolls.length > 0) {
+         const old = this.CurrentRolls;
+         const neww = new Rolls([]);
+         old.Next = neww;
+         neww.Previous = old;
+         Object.freeze(old);
+         this.History.push(neww);
+         this.CurrentRolls = neww;
+      }
       this.Changed(this.CurrentRolls);
    };
 

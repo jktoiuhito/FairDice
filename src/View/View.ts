@@ -1,27 +1,19 @@
 import { Assert } from "@jktoiuhito/utility";
-import Model from "./Model";
-import Rolls from "./Rolls";
+import DiceButton from "./DiceButton";
+import Model from "../Model/Model";
+import Rolls from "../Model/Rolls";
 
 const enum Id {
-   Dice = "dice",
-   Results = "results",
-   Controls = "controls",
+   Dice = "dice-container",
+   Results = "results-container",
+   Controls = "controls-container",
    BenchmarkButton = "button-benchmark",
    PreviousButton = "button-previous",
    NextButton = "button-next",
    NewThrowButton = "button-new",
+   RunBenchmarkButton = "run-benchmark-button",
+   ScoreCounter = "score-counter",
 }
-
-/**
- * TODO: Update counters when this.CurrentRolls changes.
- *
- * When this.CurrentRolls changes:
- *
- * rollCount.removeChild(rollCount.firstChild!);
- *    rollCount.appendChild(
- *       document.createTextNode(
- *          c.Rolls.filter((r) => r.Dice === d).length.toString()));
- */
 
 /**
  * Object responsible for managing the DOM.
@@ -30,10 +22,9 @@ export default class View {
    private static readonly Dice: number[] = [4, 6, 8, 10, 12, 20, 100];
 
    private readonly DiceContainer: HTMLDivElement;
+   private readonly Dice: DiceButton[];
    private readonly ResultsContainer: HTMLDivElement;
-   private readonly ControlsContainer: HTMLElement; // <footer>
-
-   private readonly BenchmarkButton: HTMLButtonElement;
+   private readonly ScoreCounter: HTMLHeadingElement;
    private readonly PreviousButton: HTMLButtonElement;
    private readonly NextButton: HTMLButtonElement;
    private readonly NewRollButton: HTMLButtonElement;
@@ -46,8 +37,11 @@ export default class View {
       // Get references to UI elements
       this.DiceContainer = this.GetElementById<HTMLDivElement>(Id.Dice);
       this.ResultsContainer = this.GetElementById<HTMLDivElement>(Id.Results);
-      this.ControlsContainer = this.GetElementById<HTMLElement>(Id.Controls);
-      this.BenchmarkButton = this.GetElementById<HTMLButtonElement>(
+      this.ScoreCounter = this.GetElementById<HTMLHeadingElement>(
+         Id.ScoreCounter
+      );
+      const ControlsContainer = this.GetElementById<HTMLElement>(Id.Controls);
+      const BenchmarkButton = this.GetElementById<HTMLButtonElement>(
          Id.BenchmarkButton
       );
       this.PreviousButton = this.GetElementById<HTMLButtonElement>(
@@ -57,43 +51,29 @@ export default class View {
       this.NewRollButton = this.GetElementById<HTMLButtonElement>(
          Id.NewThrowButton
       );
+      const RunBenchmarkButton = this.GetElementById<HTMLButtonElement>(
+         Id.RunBenchmarkButton
+      );
 
       // Display hidden elements
       this.DiceContainer.hidden = false;
       this.ResultsContainer.hidden = false;
-      this.ControlsContainer.hidden = false;
-      this.BenchmarkButton.hidden = false;
+      ControlsContainer.hidden = false;
+      BenchmarkButton.hidden = false;
+      this.ScoreCounter.hidden = false;
 
       // Register model event listener
       model.onCurrentRollsChange(this.DisplayCurrentRolls);
 
       // Create dice
+      this.Dice = [];
       View.Dice.forEach((d) => {
-         // Create base
-         const button = document.createElement("button");
-         button.type = "button";
-         button.className = "btn btn-primary m-2";
-         button.style.width = "4em";
-
-         // Face count
-         const faceCount = document.createElement("p");
-         faceCount.className = "m-0 p-0";
-         faceCount.append(document.createTextNode("D" + d.toString()));
-         button.appendChild(faceCount);
-
-         // Roll count
-         const rollCount = document.createElement("span");
-         rollCount.className = "m-0 p-0 badge";
-         rollCount.append(document.createTextNode("0"));
-         button.appendChild(rollCount);
-
-         // Add event
-         button.addEventListener("click", () => {
+         const diceButton = new DiceButton(d);
+         diceButton.addEventListener("click", () => {
             model.Roll(d);
          });
-
-         // Add element to container
-         this.DiceContainer.appendChild(button);
+         this.DiceContainer.appendChild(diceButton);
+         this.Dice.push(diceButton);
       });
 
       // Add event listeners to buttons
@@ -110,15 +90,15 @@ export default class View {
       this.NewRollButton.addEventListener("click", () => {
          model.Reset();
       });
-      this.BenchmarkButton.addEventListener("click", () => {
-         // TODO: benchmark display
+      RunBenchmarkButton.addEventListener("click", () => {
+         // TODO: benchmark
          throw new Error("not implemented");
       });
 
       // Assign CurrentRolls (properly assigned on first model update)
       this.CurrentRolls = new Rolls([]);
 
-      // Reset display
+      // Initialize display
       this.DisplayCurrentRolls(this.CurrentRolls);
    }
 
@@ -128,13 +108,16 @@ export default class View {
       // Assign as current rolls
       this.CurrentRolls = current;
 
-      // Clear previous rolls
+      // Clear previous results
       while (this.ResultsContainer.firstChild !== null) {
          this.ResultsContainer.removeChild(this.ResultsContainer.firstChild);
       }
 
-      // Print current rolls
+      // Print current rolls and their score
+      let score = 0;
       current.Rolls.forEach((r) => {
+         score += r.Value;
+
          // Create base element
          const card = document.createElement("div");
          card.className = "card m-1";
@@ -144,7 +127,9 @@ export default class View {
          // Dice name
          const dice = document.createElement("h5");
          dice.className = "badge text-muted";
-         dice.appendChild(document.createTextNode("d" + r.Dice.toString()));
+         dice.appendChild(
+            document.createTextNode("d" + r.Facecount.toString())
+         );
          card.appendChild(dice);
 
          // Rolled value
@@ -155,6 +140,20 @@ export default class View {
          // Add element to page
          this.ResultsContainer.appendChild(card);
       });
+      // is never null.
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      this.ScoreCounter.removeChild(this.ScoreCounter.firstChild!);
+      this.ScoreCounter.appendChild(document.createTextNode(score.toString()));
+
+      // Update dice-buttons counters
+      this.Dice.forEach(
+         // cannot be a readonly type.
+         // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
+         (d) =>
+            (d.Rollcount = this.CurrentRolls.Rolls.filter(
+               (r) => r.Facecount === d.Facecount
+            ).length)
+      );
 
       // Toggle button state
       this.NewRollButton.disabled = current.Rolls.length <= 0;
@@ -164,7 +163,8 @@ export default class View {
 
    private readonly GetElementById = <T extends HTMLElement>(id: Id): T => {
       return Assert(
-         document.getElementById(id)
+         document.getElementById(id),
+         id
       ).isObject.isNotNull.isInstanceOf(HTMLElement).value as T;
    };
 }

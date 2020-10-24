@@ -1,5 +1,5 @@
-import Model from "./Model";
-import View from "./View";
+import Model from "./Model/Model";
+import View from "./View/View";
 
 /**
  * Start the app when windows has loaded.
