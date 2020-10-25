@@ -13,6 +13,7 @@ const enum Id {
    NewThrowButton = "button-new",
    RunBenchmarkButton = "run-benchmark-button",
    ScoreCounter = "score-counter",
+   BenchmarkModal = "benchmark-modal",
 }
 
 /**
@@ -54,6 +55,9 @@ export default class View {
       const RunBenchmarkButton = this.GetElementById<HTMLButtonElement>(
          Id.RunBenchmarkButton
       );
+      const BenchmarkModal = this.GetElementById<HTMLDivElement>(
+         Id.BenchmarkModal
+      );
 
       // Display hidden elements
       this.DiceContainer.hidden = false;
@@ -61,6 +65,7 @@ export default class View {
       ControlsContainer.hidden = false;
       BenchmarkButton.hidden = false;
       this.ScoreCounter.hidden = false;
+      BenchmarkModal.hidden = false;
       // is never null.
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       document.querySelector("hr")!.hidden = false;
