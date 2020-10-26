@@ -2,19 +2,7 @@ import { Assert } from "@jktoiuhito/utility";
 import DiceButton from "./DiceButton";
 import Model from "../Model/Model";
 import Rolls from "../Model/Rolls";
-
-const enum Id {
-   Dice = "dice-container",
-   Results = "results-container",
-   Controls = "controls-container",
-   BenchmarkButton = "button-benchmark",
-   PreviousButton = "button-previous",
-   NextButton = "button-next",
-   NewThrowButton = "button-new",
-   RunBenchmarkButton = "run-benchmark-button",
-   ScoreCounter = "score-counter",
-   BenchmarkModal = "benchmark-modal",
-}
+import { Id } from "./Id";
 
 /**
  * Object responsible for managing the DOM.

@@ -78,10 +78,19 @@
       <main class="flex-shrink-0 my-3">
          <div class="container text-center">
             <noscript
-               ><p class="alert alert-danger">
+               ><p class="alert alert-danger text-left">
                   This app requires JavaScript in order to function
                </p></noscript
             >
+            <p id="apple-error" class="alert alert-danger" hidden>
+               This app does not work on Internet Explorer, Safari for Mac or on
+               any browser for iOS,
+               <a
+                  href="https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry#Browser_compatibility"
+                  >as they do not implement parts of the HTML specification
+                  necessary for the app to function </a
+               >.
+            </p>
             <div
                id="dice-container"
                class="d-flex flex-wrap justify-content-center"

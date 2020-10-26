@@ -1,3 +1,5 @@
+import { Id } from "./Id";
+
 /**
  * Button representing a single dice.
  */
@@ -53,6 +55,12 @@ export default class DiceButton extends HTMLButtonElement {
       );
    }
 }
-customElements.define(DiceButton.ElementName, DiceButton, {
-   extends: "button",
-});
+try {
+   customElements.define(DiceButton.ElementName, DiceButton, {
+      extends: "button",
+   });
+} catch (e) {
+   // is never null.
+   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+   document.getElementById(Id.AppleError)!.hidden = false;
+}
