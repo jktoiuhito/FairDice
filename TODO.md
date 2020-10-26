@@ -5,4 +5,7 @@
    mean within some limit, fail the benchmark.
 -  Find citation to prove claim about PRNG being more fair than physical dice.
 
-## Model
+## Documentation
+
+-  Add notice about lack of support for IE, Safari on Mac and all iOS browsers
+   to README.md.

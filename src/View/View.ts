@@ -47,6 +47,17 @@ export default class View {
          Id.BenchmarkModal
       );
 
+      // Create dice
+      this.Dice = [];
+      View.Dice.forEach((d) => {
+         const diceButton = new DiceButton(d);
+         diceButton.addEventListener("click", () => {
+            model.Roll(d);
+         });
+         this.DiceContainer.appendChild(diceButton);
+         this.Dice.push(diceButton);
+      });
+
       // Display hidden elements
       this.DiceContainer.hidden = false;
       this.ResultsContainer.hidden = false;
@@ -60,17 +71,6 @@ export default class View {
 
       // Register model event listener
       model.onCurrentRollsChange(this.DisplayCurrentRolls);
-
-      // Create dice
-      this.Dice = [];
-      View.Dice.forEach((d) => {
-         const diceButton = new DiceButton(d);
-         diceButton.addEventListener("click", () => {
-            model.Roll(d);
-         });
-         this.DiceContainer.appendChild(diceButton);
-         this.Dice.push(diceButton);
-      });
 
       // Add event listeners to buttons
       this.PreviousButton.addEventListener("click", () => {
