@@ -2,15 +2,18 @@
  * Id's of elements used by the app.
  */
 export const enum Id {
-   Dice = "dice-container",
-   Results = "results-container",
-   Controls = "controls-container",
+   DiceContainer = "dice-container",
+   ResultsContainer = "results-container",
+   ResultsScoreCounter = "results-score-counter",
+   ControlsContainer = "controls-container",
+   ControlsPreviousButton = "controls-button-previous",
+   ControlsNewThrowButton = "controls-button-new",
+   ControlsNextButton = "controls-button-next",
    BenchmarkButton = "button-benchmark",
-   PreviousButton = "button-previous",
-   NextButton = "button-next",
-   NewThrowButton = "button-new",
-   RunBenchmarkButton = "run-benchmark-button",
-   ScoreCounter = "score-counter",
    BenchmarkModal = "benchmark-modal",
+   BenchmarkModalIntro = "benchmark-modal-intro",
+   BenchmarkModalTest = "benchmark-modal-test",
+   BenchmarkRunButton = "benchmark-run-button",
+   BenchmarkStopButton = "benchmark-stop-button",
    AppleError = "apple-error",
 }

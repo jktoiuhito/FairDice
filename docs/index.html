@@ -83,8 +83,8 @@
                </p></noscript
             >
             <p id="apple-error" class="alert alert-danger" hidden>
-               This app does not work on Internet Explorer, Safari for Mac or on
-               any browser for iOS,
+               This app does not work on Internet Explorer, Safari or on any
+               browser for iOS,
                <a
                   href="https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry#Browser_compatibility"
                   >as they do not implement parts of the HTML specification
@@ -97,7 +97,7 @@
                hidden
             ></div>
             <hr hidden />
-            <h1 id="score-counter" class="display-2" hidden>0</h1>
+            <h1 id="results-score-counter" class="display-2" hidden>0</h1>
             <div
                id="results-container"
                class="d-flex flex-wrap mt-4 justify-content-center"
@@ -112,7 +112,7 @@
       >
          <button
             type="button"
-            id="button-previous"
+            id="controls-button-previous"
             class="btn btn-secondary mx-2"
             disabled
          >
@@ -120,7 +120,7 @@
          </button>
          <button
             type="button"
-            id="button-new"
+            id="controls-button-new"
             class="btn btn-primary mx-2"
             disabled
          >
@@ -128,7 +128,7 @@
          </button>
          <button
             type="button"
-            id="button-next"
+            id="controls-button-next"
             class="btn btn-secondary mx-2"
             disabled
          >
@@ -149,7 +149,7 @@
                      <span aria-hidden="true">&times;</span>
                   </button>
                </div>
-               <div class="modal-body">
+               <div id="benchmark-modal-intro" class="modal-body">
                   <p>
                      Extreme fairness is one of the main goals of this app. As
                      such a cryptographically secure pseudo-random number
@@ -187,13 +187,24 @@
                      superior functionality.
                   </p>
                </div>
+               <div id="benchmark-modal-test" class="modal-body" hidden>
+                  <p>TODO</p>
+               </div>
                <div class="modal-footer">
                   <button
                      type="button"
-                     id="run-benchmark-button"
+                     id="benchmark-run-button"
                      class="btn btn-primary"
                   >
                      Run benchmark
+                  </button>
+                  <button
+                     type="button"
+                     id="benchmark-stop-button"
+                     class="btn btn-primary"
+                     hidden
+                  >
+                     Stop benchmark
                   </button>
                   <button
                      type="button"

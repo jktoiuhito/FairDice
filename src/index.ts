@@ -12,5 +12,6 @@ window.addEventListener("load", () => {
       // is never null.
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       document.getElementById(Id.AppleError)!.hidden = false;
+      throw error;
    }
 });

@@ -24,15 +24,11 @@ export default class DiceButton extends HTMLButtonElement {
 
       const facecountElement = document.createElement("p");
       facecountElement.className = "m-0 p-0";
-      facecountElement.append(
-         document.createTextNode("D" + this.Facecount.toString())
-      );
+      facecountElement.textContent = "D" + this.Facecount.toString();
 
       this._rollcountElement = document.createElement("p");
       this._rollcountElement.className = "m-0 p-0 badge";
-      this._rollcountElement.append(
-         document.createTextNode(this._rollcount.toString())
-      );
+      this._rollcountElement.textContent = this._rollcount.toString();
 
       this.append(facecountElement, this._rollcountElement);
    }
@@ -48,9 +44,7 @@ export default class DiceButton extends HTMLButtonElement {
       // always exists.
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       this._rollcountElement.removeChild(this._rollcountElement.firstChild!);
-      this._rollcountElement.appendChild(
-         document.createTextNode(this._rollcount.toString())
-      );
+      this._rollcountElement.textContent = this._rollcount.toString();
    }
 }
 
