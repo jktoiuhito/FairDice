@@ -1,3 +1,5 @@
+import BenchmarkResultTable from "./BenchmarkResultTable";
+import CancellationToken from "./CancellationToken";
 import { Assert } from "@jktoiuhito/utility";
 import DiceButton from "./DiceButton";
 import Model from "../Model/Model";
@@ -8,7 +10,13 @@ import { Id } from "./Id";
  * Object responsible for managing the DOM.
  */
 export default class View {
-   private static readonly Dice: number[] = [4, 6, 8, 10, 12, 20, 100];
+   /**
+    * How many times the benchmark rolls each dice.
+    */
+   public static readonly BENCHMARK_ROUNDS = 1000000;
+
+   private static readonly DICE: number[] = [4, 6, 8, 10, 12, 20, 100];
+   private static readonly BENCHMARK_TIMEOUT = 200; // milliseconds
 
    private readonly DiceContainer: HTMLDivElement;
    private readonly Dice: DiceButton[];
@@ -17,10 +25,10 @@ export default class View {
    private readonly PreviousButton: HTMLButtonElement;
    private readonly NextButton: HTMLButtonElement;
    private readonly NewRollButton: HTMLButtonElement;
+   private readonly BenchmarkModalResultsContainer: HTMLDivElement;
 
    private CurrentRolls: Rolls;
-   private BenchmarkWorker: Worker | undefined;
-   private BenchmarkTimerId: number | undefined;
+   private readonly BenchmarkCancellationToken: CancellationToken;
 
    // object cannot be marked with the 'readonly' type modifier.
    // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
@@ -65,13 +73,13 @@ export default class View {
       const BenchmarkTest = this.GetElementById<HTMLDivElement>(
          Id.BenchmarkModalTest
       );
-      const BenchmarkModalResultsContainer = this.GetElementById<
-         HTMLDivElement
-      >(Id.BenchmarkModalResultsContainer);
+      this.BenchmarkModalResultsContainer = this.GetElementById<HTMLDivElement>(
+         Id.BenchmarkModalResultsContainer
+      );
 
       // Create dice
       this.Dice = [];
-      View.Dice.forEach((d) => {
+      View.DICE.forEach((d) => {
          const diceButton = new DiceButton(d);
          diceButton.addEventListener("click", () => {
             model.Roll(d);
@@ -100,45 +108,34 @@ export default class View {
       // Cannot be readonly type.
       // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
       BenchmarkRunButton.addEventListener("click", () => {
+         // clean up possible old results from DOM
+         while (this.BenchmarkModalResultsContainer.firstChild !== null) {
+            this.BenchmarkModalResultsContainer.removeChild(
+               this.BenchmarkModalResultsContainer.firstChild
+            );
+         }
+
          // start benchmark
-         this.BenchmarkWorker = this.CreateBenchmarkWorker();
-         this.BenchmarkTimerId = window.setInterval(() => {
-            // TODO: update DOM with the result.
-            // Just assigned above...
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            this.BenchmarkWorker!.postMessage(null);
-            throw new Error("not implemented");
-         }, 250);
+         this.BenchmarkCancellationToken.isCancelled = false;
+         this.RunBenchmark();
 
          // toggle buttons, display benchmark
          BenchmarkIntro.hidden = BenchmarkRunButton.hidden = true;
          BenchmarkTest.hidden = BenchmarkStopButton.hidden = false;
       });
       BenchmarkStopButton.addEventListener("click", () => {
-         // terminate and reset worker, reset timer
-         window.clearInterval(this.BenchmarkTimerId);
-         this.BenchmarkWorker?.terminate();
-         this.BenchmarkTimerId = 0;
-         this.BenchmarkWorker = undefined;
+         // stop execution
+         this.BenchmarkCancellationToken.isCancelled = true;
 
-         // clean up results from DOM
-         while (BenchmarkModalResultsContainer.firstChild !== null) {
-            BenchmarkTest.removeChild(
-               BenchmarkModalResultsContainer.firstChild
-            );
-         }
-
-         // toggle buttons, display info
-         BenchmarkIntro.hidden = BenchmarkRunButton.hidden = false;
-         BenchmarkTest.hidden = BenchmarkStopButton.hidden = true;
+         // toggle buttons
+         BenchmarkRunButton.hidden = false;
+         BenchmarkStopButton.hidden = true;
       });
 
-      // Assign CurrentRolls (properly assigned on first model update)
+      // Assign CurrentRolls (properly assigned on first model update) and
+      // BenchmarkCancellationToken
       this.CurrentRolls = new Rolls([]);
-
-      // No benchmark is running at start, so worker and timer are undefined
-      this.BenchmarkWorker = undefined;
-      this.BenchmarkTimerId = undefined;
+      this.BenchmarkCancellationToken = new CancellationToken();
 
       // Initialize display
       this.DisplayCurrentRolls(this.CurrentRolls);
@@ -219,31 +216,26 @@ export default class View {
       ).isObject.isNotNull.isInstanceOf(HTMLElement).value as T;
    };
 
-   private readonly CreateBenchmarkWorker = (): Worker => {
-      function benchmark(): void {
-         // TODO: benchmark function implementation
-         throw new Error("not implemented");
-      }
-
-      //https://gist.github.com/SunboX/5849664
-      let code = benchmark.toString();
-      code = code.substring(code.indexOf("{") + 1, code.lastIndexOf("}"));
-      const blob = new Blob([code], { type: "application/javascript" });
-      const worker = new Worker(URL.createObjectURL(blob));
-      // Cannot be readonly type.
-      // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
-      worker.onerror = (e): void => console.error(e);
-      worker.onmessage = (): BencharkResult[] => [new BencharkResult(4)];
-      return worker;
+   //https://stackoverflow.com/questions/10344498/best-way-to-iterate-over-an-array-without-blocking-the-ui/10344560#10344560
+   private readonly RunBenchmark = (): void => {
+      View.DICE.some((d) => {
+         const resultTable = new BenchmarkResultTable(d);
+         this.BenchmarkModalResultsContainer.appendChild(resultTable);
+         const chunk = 1000;
+         const Benchmark = (): void => {
+            let chnk = chunk;
+            while (chnk-- > 0 && resultTable.Count < View.BENCHMARK_ROUNDS) {
+               resultTable.AddRoll(Model.RandomNumber(d));
+            }
+            resultTable.Update();
+            if (this.BenchmarkCancellationToken.isCancelled) {
+               return;
+            } else if (resultTable.Count < View.BENCHMARK_ROUNDS) {
+               window.setTimeout(() => Benchmark(), View.BENCHMARK_TIMEOUT);
+            }
+         };
+         Benchmark();
+         return this.BenchmarkCancellationToken.isCancelled;
+      });
    };
-}
-
-class BencharkResult {
-   public readonly Facecount: number;
-   public _mean = 0;
-   public _standardDeviation = 0;
-
-   public constructor(facecount: number) {
-      this.Facecount = facecount;
-   }
 }
