@@ -65,6 +65,9 @@ export default class View {
       const BenchmarkTest = this.GetElementById<HTMLDivElement>(
          Id.BenchmarkModalTest
       );
+      const BenchmarkModalResultsContainer = this.GetElementById<
+         HTMLDivElement
+      >(Id.BenchmarkModalResultsContainer);
 
       // Create dice
       this.Dice = [];
@@ -119,8 +122,10 @@ export default class View {
          this.BenchmarkWorker = undefined;
 
          // clean up results from DOM
-         while (BenchmarkTest.firstChild !== null) {
-            BenchmarkTest.removeChild(BenchmarkTest.firstChild);
+         while (BenchmarkModalResultsContainer.firstChild !== null) {
+            BenchmarkTest.removeChild(
+               BenchmarkModalResultsContainer.firstChild
+            );
          }
 
          // toggle buttons, display info
@@ -228,7 +233,17 @@ export default class View {
       // Cannot be readonly type.
       // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
       worker.onerror = (e): void => console.error(e);
-      worker.onmessage = (): string => "not implemented";
+      worker.onmessage = (): BencharkResult[] => [new BencharkResult(4)];
       return worker;
    };
+}
+
+class BencharkResult {
+   public readonly Facecount: number;
+   public _mean = 0;
+   public _standardDeviation = 0;
+
+   public constructor(facecount: number) {
+      this.Facecount = facecount;
+   }
 }

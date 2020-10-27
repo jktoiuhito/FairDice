@@ -15,5 +15,6 @@ export const enum Id {
    BenchmarkModalTest = "benchmark-modal-test",
    BenchmarkRunButton = "benchmark-run-button",
    BenchmarkStopButton = "benchmark-stop-button",
+   BenchmarkModalResultsContainer = "benchmark-modal-results-container",
    AppleError = "apple-error",
 }

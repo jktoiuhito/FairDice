@@ -188,7 +188,30 @@
                   </p>
                </div>
                <div id="benchmark-modal-test" class="modal-body" hidden>
-                  <p>TODO</p>
+                  <p>
+                     The benchmark is now running. You can close the window and
+                     continue to use the application normally.
+                  </p>
+                  <p>
+                     The benchmark calculates the
+                     <a href="https://en.wikipedia.org/wiki/Mean"
+                        >arithmetic mean</a
+                     >
+                     and
+                     <a
+                        href="https://en.wikipedia.org/wiki/Standard_deviation#Corrected_sample_standard_deviation"
+                        >corrected sample standard deviation</a
+                     >
+                     of each dice. Standard deviation is calculated against the
+                     <b>expected mean</b>, which is the facecount of the dice
+                     divided by two + 0.5 (eg. 4 / 2 + 0.5 = 2.5).
+                  </p>
+                  <p>
+                     For the benchmark to be considered passed, all means must
+                     be within ??? from their expected means, and all standard
+                     deviations must be less than ???.
+                  </p>
+                  <div id="benchmark-modal-results-container"></div>
                </div>
                <div class="modal-footer">
                   <button
