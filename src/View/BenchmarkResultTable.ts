@@ -14,21 +14,25 @@ export default class BenchmarkResultTable extends HTMLTableElement {
    private readonly _countValue: HTMLTableDataCellElement;
    private readonly _meanValue: HTMLTableDataCellElement;
    private readonly _standardDeviationValue: HTMLTableDataCellElement;
+
    private readonly _facecount: number;
-   private readonly _precision: number;
-   private readonly _expectedMean: number;
    private readonly _rolls: number[];
+
+   private readonly _expectedRollCount: number;
+   private readonly _expectedMean: number;
+   private readonly _meanPrecision: number;
 
    public constructor(facecount: number) {
       super();
 
-      this._facecount = facecount;
-      this._expectedMean = this._facecount / 2 + 0.5;
-      this._precision = (this._facecount / 2).toString().length + 2;
       this.className = "table table-bordered";
 
-      // initialize rolls (otherwise filled with NaN:s)
+      this._facecount = facecount;
+      // rolls needs to be filled, otherwise contains NaN:s
       this._rolls = new Array<number>(this._facecount).fill(0);
+      this._expectedMean = this._facecount / 2 + 0.5;
+      this._meanPrecision = (this._facecount / 2).toString().length + 3;
+      this._expectedRollCount = View.BENCHMARK_ROUNDS_PER_FACE * facecount;
 
       // header
       const headerRow = document.createElement("tr");
@@ -50,7 +54,7 @@ export default class BenchmarkResultTable extends HTMLTableElement {
       this._countValue.textContent = "0";
       countExpected.textContent = new Intl.NumberFormat(
          BenchmarkResultTable.NUMBER_LOCALE
-      ).format(View.BENCHMARK_ROUNDS);
+      ).format(this._expectedRollCount);
 
       // mean
       const meanRow = document.createElement("tr");
@@ -61,7 +65,7 @@ export default class BenchmarkResultTable extends HTMLTableElement {
       meanHeader.textContent = "Mean";
       this._meanValue.textContent = "0";
       meanExpected.textContent = this._expectedMean.toPrecision(
-         this._precision
+         this._meanPrecision
       );
 
       // standard deviation
@@ -102,27 +106,28 @@ export default class BenchmarkResultTable extends HTMLTableElement {
       this._countValue.textContent = new Intl.NumberFormat(
          BenchmarkResultTable.NUMBER_LOCALE
       ).format(count);
-      if (count === View.BENCHMARK_ROUNDS) {
+      if (count === this._expectedRollCount) {
          // is never null.
          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
          this._countValue.parentElement!.className = "table-success";
       }
 
-      const meanString = this.Mean.toPrecision(this._precision + 2);
-      this._meanValue.textContent = meanString;
+      const mean = this.Mean;
+      this._meanValue.textContent = mean.toPrecision(this._meanPrecision + 1);
+      const meanDifference = Math.abs(mean - this._expectedMean);
       // is never null.
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      this._meanValue.parentElement!.className = meanString.startsWith(
-         this._expectedMean.toPrecision(this._precision)
-      )
-         ? "table-success"
-         : "table-danger";
+      this._meanValue.parentElement!.className =
+         meanDifference < 0.001
+            ? "table-success"
+            : meanDifference < 0.01
+            ? "table-warning"
+            : "table-danger";
 
       const standardDeviation = this.StandardDeviation;
-      const standardDeviationString = standardDeviation.toPrecision(
-         this._precision
-      );
-      this._standardDeviationValue.textContent = standardDeviationString;
+      this._standardDeviationValue.textContent = Math.round(
+         standardDeviation
+      ).toString();
    };
 
    /**
@@ -141,8 +146,12 @@ export default class BenchmarkResultTable extends HTMLTableElement {
    }
 
    private get StandardDeviation(): number {
-      // TODO: implement
-      return 0;
+      return Math.sqrt(
+         this._rolls.reduce(
+            (a, v) => a + (v - View.BENCHMARK_ROUNDS_PER_FACE) ** 2,
+            0
+         ) / this._facecount
+      );
    }
 }
 customElements.define(BenchmarkResultTable.ELEMENT_NAME, BenchmarkResultTable, {

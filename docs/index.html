@@ -149,71 +149,86 @@
                      <span aria-hidden="true">&times;</span>
                   </button>
                </div>
-               <div id="benchmark-modal-intro" class="modal-body">
+               <div class="modal-body">
                   <p>
                      Extreme fairness is one of the main goals of this app. As
-                     such a cryptographically secure pseudo-random number
-                     generator (CSPRNG) is used instead of "just" a basic
-                     pseudo-random number generator (PRNG) - which in itself
-                     could still be humongously more fair than even the best
-                     physical dice.
-                  </p>
-                  <p>
-                     No CSPRNG produces totally random results (as implied by
-                     their name, "pseudo-random"). In the context of web-apps
-                     their results can vary based on the model and version of
-                     the used browser, operating system and hardware.
-                  </p>
-                  <p>
-                     To combat this uncertainness, you can run this benchmark to
-                     assert that the rolls made with this app are indeed fair
-                     and their distribution even on the particular device you
-                     are now using.
-                  </p>
-                  <p>
-                     The benchmark will roll each dice a million times, calulate
-                     the mean and standard deviations of the resulting values
-                     and compare them to their expected values. All means must
-                     be equal to their expected values with the accuracy of two
-                     digits, and all standard deviations must be ???. Otherwise
-                     the benchmark will display failure.
-                  </p>
-                  <p>
-                     It is up to you whether to use the app or not, no matter
-                     what the result of the benchmark is. Even if the benchmark
-                     would fail, the app might still give far more fair results
-                     than any physical dice ever could, while still providing
-                     superior functionality.
-                  </p>
-               </div>
-               <div id="benchmark-modal-test" class="modal-body" hidden>
-                  <p>
-                     The benchmark is now running. You can close the window and
-                     continue to use FairDice normally. However, please bear in
-                     mind that depending on the capabilities of your device the
-                     benchmark might slow down FairDice, and your browser,
-                     considerably.
-                  </p>
-                  <p>
-                     The benchmark calculates the
-                     <a href="https://en.wikipedia.org/wiki/Mean"
-                        >arithmetic mean</a
-                     >
-                     and
+                     such a
                      <a
-                        href="https://en.wikipedia.org/wiki/Standard_deviation#Corrected_sample_standard_deviation"
-                        >corrected sample standard deviation</a
+                        href="https://developer.mozilla.org/en-US/docs/Web/API/Crypto/getRandomValues"
+                        >cryptographically secure pseudo-random number
+                        generator</a
                      >
-                     of each dice. Standard deviation is calculated against the
-                     <b>expected mean</b>, which is the facecount of the dice
-                     divided by two + 0.5 (eg. 4 / 2 + 0.5 = 2.5).
+                     (CSPRNG) is used instead of an ordinary pseudo-random
+                     number generator (PRNG). This ensures that all generated
+                     numbers are based on a seed which is very hard to tamper
+                     with, making it harder to rig the results.
                   </p>
                   <p>
-                     For the benchmark to be considered passed, all means must
-                     be equal to their expected means with the precision of two
-                     digits (0.01), and all standard deviations must be less
-                     than ???.
+                     No CSPRNG produces totally random results - as implied by
+                     their name, "pseudo-random". The results of the CSPRNG used
+                     by FairDice varies based on the model and version of the
+                     used browser, and possibly by the operating system and
+                     hardware.
                   </p>
+                  <p>
+                     You can run this benchmark to assert that the rolls made
+                     with FairDice are indeed fair and their distribution even
+                     on the particular device and browser you are currently
+                     using.
+                  </p>
+                  <p>
+                     You can close the benchmark window and continue to use
+                     FairDice normally while the benchmark is running. However,
+                     please bear in mind that depending on the capabilities of
+                     your device the benchmark might slow down FairDice, and
+                     possibly the rest of your browser, considerably.
+                  </p>
+                  <p>
+                     Remember that it is up to you to decide whether to use
+                     FairDice or not, no matter what the result of the benchmark
+                     is. Even if the benchmark would display bad results based
+                     on its standards, FairDice might still give far more fair
+                     results than any physical dice ever could, while still
+                     providing superior functionality.
+                  </p>
+                  <h5>
+                     <a href="https://en.wikipedia.org/wiki/Mean"
+                        >Sample mean</a
+                     >
+                  </h5>
+                  <p>TODO: What?</p>
+                  <p>TODO: Why?</p>
+                  <p>Expected mean: facecount / 2 + 0.5</p>
+                  <table class="table table-sm">
+                     <thead>
+                        <tr>
+                           <th scope="col">Deviation from expected mean</th>
+                           <th scope="col">Grade</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr class="table-success">
+                           <td>< 0.001</td>
+                           <td>Good</td>
+                        </tr>
+                        <tr class="table-warning">
+                           <td>< 0.01</td>
+                           <td>Mediocre</td>
+                        </tr>
+                        <tr class="table-danger">
+                           <td>>= 0.01</td>
+                           <td>Bad</td>
+                        </tr>
+                     </tbody>
+                  </table>
+                  <h5>
+                     <a href="https://en.wikipedia.org/wiki/Standard_deviation">
+                        Population standard deviation (σ)
+                     </a>
+                  </h5>
+                  <p>TODO: What?</p>
+                  <p>TODO: Why?</p>
+                  <p>Expected SD: 0</p>
                   <div id="benchmark-modal-results-container"></div>
                </div>
                <div class="modal-footer">
@@ -222,7 +237,7 @@
                      id="benchmark-run-button"
                      class="btn btn-primary"
                   >
-                     Run benchmark
+                     Start benchmark
                   </button>
                   <button
                      type="button"

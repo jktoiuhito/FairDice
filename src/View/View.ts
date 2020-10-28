@@ -13,7 +13,7 @@ export default class View {
    /**
     * How many times the benchmark rolls each dice.
     */
-   public static readonly BENCHMARK_ROUNDS = 1000000;
+   public static readonly BENCHMARK_ROUNDS_PER_FACE = 100000;
 
    private static readonly DICE: number[] = [4, 6, 8, 10, 12, 20, 100];
    private static readonly BENCHMARK_TIMEOUT = 200; // milliseconds
@@ -67,12 +67,6 @@ export default class View {
       const BenchmarkStopButton = this.GetElementById<HTMLButtonElement>(
          Id.BenchmarkStopButton
       );
-      const BenchmarkIntro = this.GetElementById<HTMLDivElement>(
-         Id.BenchmarkModalIntro
-      );
-      const BenchmarkTest = this.GetElementById<HTMLDivElement>(
-         Id.BenchmarkModalTest
-      );
       this.BenchmarkModalResultsContainer = this.GetElementById<HTMLDivElement>(
          Id.BenchmarkModalResultsContainer
       );
@@ -108,7 +102,7 @@ export default class View {
       // Cannot be readonly type.
       // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
       BenchmarkRunButton.addEventListener("click", () => {
-         // clean up possible old results from DOM
+         // clean up possible old results
          while (this.BenchmarkModalResultsContainer.firstChild !== null) {
             this.BenchmarkModalResultsContainer.removeChild(
                this.BenchmarkModalResultsContainer.firstChild
@@ -119,9 +113,9 @@ export default class View {
          this.BenchmarkCancellationToken.isCancelled = false;
          this.RunBenchmark();
 
-         // toggle buttons, display benchmark
-         BenchmarkIntro.hidden = BenchmarkRunButton.hidden = true;
-         BenchmarkTest.hidden = BenchmarkStopButton.hidden = false;
+         // toggle buttons
+         BenchmarkRunButton.hidden = true;
+         BenchmarkStopButton.hidden = false;
       });
       BenchmarkStopButton.addEventListener("click", () => {
          // stop execution
@@ -221,16 +215,17 @@ export default class View {
       View.DICE.some((d) => {
          const resultTable = new BenchmarkResultTable(d);
          this.BenchmarkModalResultsContainer.appendChild(resultTable);
+         const rounds = View.BENCHMARK_ROUNDS_PER_FACE * d;
          const chunk = 1000;
          const Benchmark = (): void => {
             let chnk = chunk;
-            while (chnk-- > 0 && resultTable.Count < View.BENCHMARK_ROUNDS) {
+            while (chnk-- > 0 && resultTable.Count < rounds) {
                resultTable.AddRoll(Model.RandomNumber(d));
             }
             resultTable.Update();
             if (this.BenchmarkCancellationToken.isCancelled) {
                return;
-            } else if (resultTable.Count < View.BENCHMARK_ROUNDS) {
+            } else if (resultTable.Count < rounds) {
                window.setTimeout(() => Benchmark(), View.BENCHMARK_TIMEOUT);
             }
          };
