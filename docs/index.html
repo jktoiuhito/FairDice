@@ -24,7 +24,21 @@
          integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
          crossorigin="anonymous"
       ></script>
-      <!-- TODO: add integrity check -->
+      <script>
+         MathJax = {
+            tex: {
+               inlineMath: [
+                  ["$", "$"],
+                  ["\\(", "\\)"],
+               ],
+            },
+         };
+      </script>
+      <script
+         src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js"
+         integrity="sha384-fNl9rj/eK1wEYfKc26CbPM6qkVQ+9MvYaoAFNql4ulbjBEWV2XLNP1UB8jQTtSe3"
+         crossorigin="anonymous"
+      ></script>
       <script src="index.js"></script>
       <title>FairDice</title>
       <meta name="author" content="jktoiuhito" />
@@ -55,7 +69,7 @@
          <div id="navbarContent" class="collapse navbar-collapse">
             <div class="navbar-nav">
                <span class="navbar-text mr-3"
-                  ><small>Version 1.0.0</small></span
+                  ><small>Version 1.0.0rc</small></span
                >
                <button
                   type="button"
@@ -193,7 +207,7 @@
                   </p>
                   <h5>
                      <a href="https://en.wikipedia.org/wiki/Mean"
-                        >Sample mean</a
+                        >Sample mean (${\bar {x}}$)</a
                      >
                   </h5>
                   <p>TODO: What?</p>
@@ -221,14 +235,35 @@
                         </tr>
                      </tbody>
                   </table>
+                  <p>
+                     The formula for calculating the sample mean for a dice with
+                     a facecount of f is as follows:
+                  </p>
+                  <p>
+                     $${\bar {x}}_{f}=\frac{\sum_{i=1}^{f}Rollcount_{i}\cdot
+                     i}{f}$$
+                  </p>
                   <h5>
                      <a href="https://en.wikipedia.org/wiki/Standard_deviation">
                         Population standard deviation (σ)
                      </a>
                   </h5>
-                  <p>TODO: What?</p>
-                  <p>TODO: Why?</p>
-                  <p>Expected SD: 0</p>
+                  <p>
+                     Population standard deviation (σ) is calculated from the
+                     amount of times a single value is rolled, and tells
+                     <b>how even the distribution of rolls is</b>. A very small
+                     σ implies that all values are rolled evenly, while a very
+                     high σ implies that some values are rolled noticeably more
+                     often than others. <b>Ideal σ is zero (0)</b>.
+                  </p>
+                  <p>
+                     The formula for calculating σ for a dice with a facecount
+                     of f is as follows:
+                  </p>
+                  <p>
+                     $$σ_{f}=\sqrt{\frac{\sum_{i=1}^{f}\left(Rollcount_{i}-\left(\frac{f}{2}+0.5\
+                     \right)\right)^{2}}{f}}$$
+                  </p>
                   <div id="benchmark-modal-results-container"></div>
                </div>
                <div class="modal-footer">
