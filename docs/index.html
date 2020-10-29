@@ -94,8 +94,8 @@
             <noscript
                ><div class="alert alert-danger text-left">
                   <p>
-                     FairDice cannot work without JavaScript. Please enable it
-                     from your browsers settings.
+                     FairDice requires JavaScript. Please enable it from your
+                     browsers settings.
                   </p>
                   <p>Worried about privacy? Check the <a href="./privacy.html">
                      privacy disclaimer</a>
@@ -216,12 +216,13 @@
                      <a href="https://en.wikipedia.org/wiki/Mean">sample mean</a>
                      of the rolled values ${\bar {x}}_{values}$ and
                      <a href="https://en.wikipedia.org/wiki/Standard_deviation">
-                        population standard deviation</a> of faces frequencies
-                        $\sigma_{faces}$.</p>
+                        population standard deviation
+                     </a> of faces frequencies $\sigma_{faces}$.
+                  </p>
                   <p>
-                     Formulas are as follows. In all cases $f$ is the facecount
-                     of a dice and $r_{i}$ is the rollcount of a specific value
-                     $i$.
+                     Formulas are as follows. $f$ is the facecount of a dice and
+                     $r_{i}$ is the amount of times a specific face $i$ has been
+                     rolled.
                   </p>
                   <!-- expected (population) mean of values -->
                   <div class="overflow-auto">$$\mu_{values}=\frac{f}{2}+0.5$$</div>
@@ -229,34 +230,45 @@
                   <div class="overflow-auto">
                      $${\bar {x}}_{values}=\frac{\sum_{i=1}^{f}r_{i}\cdot i}{\sum_{i=1}^{f}r_{i}}$$
                   </div>
-                  <!-- grading sample mean of values -->
-                  <div class="overflow-auto">
-                     $$Grade({\bar {x}}_{values})=
-                     \begin{cases}
-                      Good       & \text{if } \left|\mu_{values}-{\bar {x}}_{values}\right| < 0.001 \\
-                      Mediocre   & \text{if } \left|\mu_{values}-{\bar {x}}_{values}\right| < 0.01 \\
-                      Bad        & \text{otherwise}
-                     \end{cases}$$
-                  </div>
                   <!-- expected (population) mean of faces -->
                   <div class="overflow-auto">$$\mu_{faces}=100000$$</div>
                   <!-- population standard deviation of faces -->
                   <div class="overflow-auto">
                      $$\sigma_{faces}=\sqrt{\frac{\sum_{i=1}^{f}\left(r_{i}-\mu_{faces}\right)^{2}}{f}}$$
                   </div class="overflow-auto">
+                  <p>
+                     If the CSPRNG is fair, ${\bar {x}}_{values}$ approaches
+                     $\mu_{values}$
+                  </p>
+                  <!-- grading sample mean of values -->
+                  <div class="overflow-auto">
+                     $$Grade({\bar {x}}_{values})=
+                     \begin{cases}
+                     Good       & \text{if } \left|\mu_{values}-{\bar {x}}_{values}\right| < 0.001 \\
+                     Mediocre   & \text{if } \left|\mu_{values}-{\bar {x}}_{values}\right| < 0.01 \\
+                     Bad        & \text{otherwise}
+                     \end{cases}$$
+                  </div>
+                  <p>
+                     However, ${\bar {x}}_{values}$ can be equal to $\mu_{values}$
+                     even if the distribution of values would be uneven (imagine
+                     a (reverse) U, V or W shaped distribution). A small
+                     $\sigma_{faces}$ tells us that the CSPRNG generates an even
+                     distribution of all values.
+                  </p>
                   <!-- grading population standard deviation of faces -->
                   <div class="overflow-auto">
                      $$Grade(\sigma_{faces})=
                      \begin{cases}
-                      Good       & \text{if } \sigma_{faces} < 250 \\
-                      Mediocre   & \text{if } \sigma_{faces} < 1000 \\
-                      Bad        & \text{otherwise}
-                     \end{cases}$$
+                        Good       & \text{if } \sigma_{faces} < 250 \\
+                        Mediocre   & \text{if } \sigma_{faces} < 1000 \\
+                        Bad        & \text{otherwise}
+                        \end{cases}$$
+                     </div>
+                     <div id="benchmark-modal-results-container"></div>
                   </div>
-                  <div id="benchmark-modal-results-container"></div>
-               </div>
-               <div class="modal-footer">
-                  <button
+                  <div class="modal-footer">
+                     <button
                      type="button"
                      id="benchmark-run-button"
                      class="btn btn-primary"

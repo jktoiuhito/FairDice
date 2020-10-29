@@ -22,7 +22,7 @@ export default class View {
    public static readonly BENCHMARK_ROUNDS_PER_FACE = 100000;
 
    private static readonly DICE: number[] = [4, 6, 8, 10, 12, 20, 100];
-   private static readonly BENCHMARK_TIMEOUT = 100; // milliseconds
+   private static readonly BENCHMARK_TIMEOUT = 25; // milliseconds
 
    private readonly DiceContainer: HTMLDivElement;
    private readonly Dice: DiceButton[];
@@ -32,6 +32,8 @@ export default class View {
    private readonly NextButton: HTMLButtonElement;
    private readonly NewRollButton: HTMLButtonElement;
    private readonly BenchmarkModalResultsContainer: HTMLDivElement;
+   private readonly BenchmarkStartButton: HTMLButtonElement;
+   private readonly BenchmarkStopButton: HTMLButtonElement;
 
    private CurrentRolls: Rolls;
    private readonly BenchmarkCancellationToken: CancellationToken;
@@ -67,10 +69,10 @@ export default class View {
       const BenchmarkModal = this.GetElementById<HTMLDivElement>(
          Id.BenchmarkModal
       );
-      const BenchmarkRunButton = this.GetElementById<HTMLButtonElement>(
+      this.BenchmarkStartButton = this.GetElementById<HTMLButtonElement>(
          Id.BenchmarkRunButton
       );
-      const BenchmarkStopButton = this.GetElementById<HTMLButtonElement>(
+      this.BenchmarkStopButton = this.GetElementById<HTMLButtonElement>(
          Id.BenchmarkStopButton
       );
       this.BenchmarkModalResultsContainer = this.GetElementById<HTMLDivElement>(
@@ -107,7 +109,7 @@ export default class View {
       });
       // Cannot be readonly type.
       // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
-      BenchmarkRunButton.addEventListener("click", () => {
+      this.BenchmarkStartButton.addEventListener("click", () => {
          // clean up possible old results
          while (this.BenchmarkModalResultsContainer.firstChild !== null) {
             this.BenchmarkModalResultsContainer.removeChild(
@@ -120,16 +122,16 @@ export default class View {
          this.RunBenchmark();
 
          // toggle buttons
-         BenchmarkRunButton.hidden = true;
-         BenchmarkStopButton.hidden = false;
+         this.BenchmarkStartButton.hidden = true;
+         this.BenchmarkStopButton.hidden = false;
       });
-      BenchmarkStopButton.addEventListener("click", () => {
+      this.BenchmarkStopButton.addEventListener("click", () => {
          // stop execution
          this.BenchmarkCancellationToken.isCancelled = true;
 
          // toggle buttons
-         BenchmarkRunButton.hidden = false;
-         BenchmarkStopButton.hidden = true;
+         this.BenchmarkStartButton.hidden = false;
+         this.BenchmarkStopButton.hidden = true;
       });
 
       // Assign CurrentRolls (properly assigned on first model update) and
@@ -218,7 +220,7 @@ export default class View {
 
    //https://stackoverflow.com/questions/10344498/best-way-to-iterate-over-an-array-without-blocking-the-ui/10344560#10344560
    private readonly RunBenchmark = (): void => {
-      View.DICE.some((d) => {
+      View.DICE.forEach((d, i) => {
          const resultTable = new BenchmarkResultTable(d);
          this.BenchmarkModalResultsContainer.appendChild(resultTable);
          const rounds = View.BENCHMARK_ROUNDS_PER_FACE * d;
@@ -233,12 +235,16 @@ export default class View {
                return;
             } else if (resultTable.Count < rounds) {
                window.setTimeout(() => Benchmark(), View.BENCHMARK_TIMEOUT);
+            } else if (i === View.DICE.length - 1) {
+               // for the last (longest running) dice, toggle buttons when
+               // benchmark is done.
+               this.BenchmarkStartButton.hidden = false;
+               this.BenchmarkStopButton.hidden = true;
             }
          };
          Benchmark();
-         return this.BenchmarkCancellationToken.isCancelled;
       });
-      // BenchmarkResultTables add new Tex to DOM, need to re-typeset.
+      // BenchmarkResultTables add new Tex-strings to DOM, need to re-typeset.
       MathJax.typeset();
    };
 }

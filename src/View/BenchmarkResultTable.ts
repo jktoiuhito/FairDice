@@ -109,25 +109,27 @@ export default class BenchmarkResultTable extends HTMLTableElement {
 
       const mean = this.Mean;
       this._meanValue.textContent = mean.toPrecision(this._meanPrecision + 1);
-      const meanDifference = Math.abs(mean - this._expectedMean);
-      // is never null.
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      this._meanValue.parentElement!.className =
-         meanDifference < 0.001
-            ? "table-success"
-            : meanDifference < 0.01
-            ? "table-warning"
-            : "table-danger";
 
       const standardDeviation = this.StandardDeviation;
       this._standardDeviationValue.textContent = Math.round(
          standardDeviation
       ).toString();
 
+      // colorizing
       if (count === this._expectedRollCount) {
          // is never null.
          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
          this._countValue.parentElement!.className = "table-success";
+
+         const meanDifference = Math.abs(mean - this._expectedMean);
+         // is never null.
+         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+         this._meanValue.parentElement!.className =
+            meanDifference < 0.001
+               ? "table-success"
+               : meanDifference < 0.01
+               ? "table-warning"
+               : "table-danger";
          // is never null.
          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
          this._standardDeviationValue.parentElement!.className =
