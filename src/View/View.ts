@@ -22,7 +22,7 @@ export default class View {
    public static readonly BENCHMARK_ROUNDS_PER_FACE = 100000;
 
    private static readonly DICE: number[] = [4, 6, 8, 10, 12, 20, 100];
-   private static readonly BENCHMARK_TIMEOUT = 200; // milliseconds
+   private static readonly BENCHMARK_TIMEOUT = 100; // milliseconds
 
    private readonly DiceContainer: HTMLDivElement;
    private readonly Dice: DiceButton[];

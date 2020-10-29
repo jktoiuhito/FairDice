@@ -224,31 +224,35 @@
                      $i$.
                   </p>
                   <!-- expected (population) mean of values -->
-                  <p>$$\mu_{values}=\frac{f}{2}+0.5$$</p>
+                  <div class="overflow-auto">$$\mu_{values}=\frac{f}{2}+0.5$$</div>
                   <!-- sample mean of values -->
-                  <p>
+                  <div class="overflow-auto">
                      $${\bar {x}}_{values}=\frac{\sum_{i=1}^{f}r_{i}\cdot i}{\sum_{i=1}^{f}r_{i}}$$
-                  </p>
+                  </div>
                   <!-- grading sample mean of values -->
-                  <p>$$Grade({\bar {x}}_{values})=
+                  <div class="overflow-auto">
+                     $$Grade({\bar {x}}_{values})=
                      \begin{cases}
                       Good       & \text{if } \left|\mu_{values}-{\bar {x}}_{values}\right| < 0.001 \\
                       Mediocre   & \text{if } \left|\mu_{values}-{\bar {x}}_{values}\right| < 0.01 \\
                       Bad        & \text{otherwise}
-                     \end{cases}$$</p>
+                     \end{cases}$$
+                  </div>
                   <!-- expected (population) mean of faces -->
-                  <p>$$\mu_{faces}=100000$$</p>
+                  <div class="overflow-auto">$$\mu_{faces}=100000$$</div>
                   <!-- population standard deviation of faces -->
-                  <p>
+                  <div class="overflow-auto">
                      $$\sigma_{faces}=\sqrt{\frac{\sum_{i=1}^{f}\left(r_{i}-\mu_{faces}\right)^{2}}{f}}$$
-                  </p>
+                  </div class="overflow-auto">
                   <!-- grading population standard deviation of faces -->
-                  <p>$$Grade(\sigma_{faces})=
+                  <div class="overflow-auto">
+                     $$Grade(\sigma_{faces})=
                      \begin{cases}
                       Good       & \text{if } \sigma_{faces} < 250 \\
                       Mediocre   & \text{if } \sigma_{faces} < 1000 \\
                       Bad        & \text{otherwise}
-                     \end{cases}$$</p>
+                     \end{cases}$$
+                  </div>
                   <div id="benchmark-modal-results-container"></div>
                </div>
                <div class="modal-footer">
