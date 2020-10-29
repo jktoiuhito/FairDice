@@ -262,7 +262,7 @@
                   <!-- population standard deviation of faces -->
                   <div class="overflow-auto">
                      $$\sigma_{faces}=\sqrt{\frac{\sum_{i=1}^{f}\left(r_{i}-\mu_{faces}\right)^{2}}{f}}$$
-                  </div class="overflow-auto">
+                  </div>
                   <p>
                      If the CSPRNG is fair, ${\bar {x}}_{values}$ approaches
                      $\mu_{values}$
@@ -271,8 +271,8 @@
                   <div class="overflow-auto">
                      $$Grade({\bar {x}}_{values})=
                      \begin{cases}
-                     Good       & \text{if } \left|\mu_{values}-{\bar {x}}_{values}\right| < 0.001 \\
-                     Mediocre   & \text{if } \left|\mu_{values}-{\bar {x}}_{values}\right| < 0.01 \\
+                     Good       & \text{if } \left|\mu_{values}-{\bar {x}}_{values}\right| &lt; 0.001 \\
+                     Mediocre   & \text{if } \left|\mu_{values}-{\bar {x}}_{values}\right| &lt; 0.01 \\
                      Bad        & \text{otherwise}
                      \end{cases}$$
                   </div>
@@ -287,8 +287,8 @@
                   <div class="overflow-auto">
                      $$Grade(\sigma_{faces})=
                      \begin{cases}
-                        Good       & \text{if } \sigma_{faces} < 250 \\
-                        Mediocre   & \text{if } \sigma_{faces} < 1000 \\
+                        Good       & \text{if } \sigma_{faces} &lt; 250 \\
+                        Mediocre   & \text{if } \sigma_{faces} &lt; 1000 \\
                         Bad        & \text{otherwise}
                         \end{cases}$$
                      </div>
