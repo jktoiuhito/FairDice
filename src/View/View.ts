@@ -6,6 +6,12 @@ import Model from "../Model/Model";
 import Rolls from "../Model/Rolls";
 import { Id } from "./Id";
 
+// doesn't matter in a declaration
+// eslint-disable-next-line @typescript-eslint/no-namespace
+declare namespace MathJax {
+   function typeset(): void;
+}
+
 /**
  * Object responsible for managing the DOM.
  */
@@ -232,5 +238,7 @@ export default class View {
          Benchmark();
          return this.BenchmarkCancellationToken.isCancelled;
       });
+      // BenchmarkResultTables add new Tex to DOM, need to re-typeset.
+      MathJax.typeset();
    };
 }

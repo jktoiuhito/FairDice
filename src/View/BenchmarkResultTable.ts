@@ -50,7 +50,7 @@ export default class BenchmarkResultTable extends HTMLTableElement {
       this._countValue = document.createElement("td");
       const countExpected = document.createElement("td");
       countRow.append(countHeader, this._countValue, countExpected);
-      countHeader.textContent = "Count";
+      countHeader.textContent = "Rollcount";
       this._countValue.textContent = "0";
       countExpected.textContent = new Intl.NumberFormat(
          BenchmarkResultTable.NUMBER_LOCALE
@@ -62,7 +62,7 @@ export default class BenchmarkResultTable extends HTMLTableElement {
       this._meanValue = document.createElement("td");
       const meanExpected = document.createElement("td");
       meanRow.append(meanHeader, this._meanValue, meanExpected);
-      meanHeader.textContent = "Mean";
+      meanHeader.textContent = "${\\bar {x}}_{values}$";
       this._meanValue.textContent = "0";
       meanExpected.textContent = this._expectedMean.toPrecision(
          this._meanPrecision
@@ -78,7 +78,7 @@ export default class BenchmarkResultTable extends HTMLTableElement {
          this._standardDeviationValue,
          standardDeviationExpected
       );
-      standardDeviationHeader.textContent = "Standard Deviation";
+      standardDeviationHeader.textContent = "$\\sigma_{faces}$";
       this._standardDeviationValue.textContent = "0";
       standardDeviationExpected.textContent = "0";
 
@@ -106,11 +106,6 @@ export default class BenchmarkResultTable extends HTMLTableElement {
       this._countValue.textContent = new Intl.NumberFormat(
          BenchmarkResultTable.NUMBER_LOCALE
       ).format(count);
-      if (count === this._expectedRollCount) {
-         // is never null.
-         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-         this._countValue.parentElement!.className = "table-success";
-      }
 
       const mean = this.Mean;
       this._meanValue.textContent = mean.toPrecision(this._meanPrecision + 1);
@@ -128,6 +123,20 @@ export default class BenchmarkResultTable extends HTMLTableElement {
       this._standardDeviationValue.textContent = Math.round(
          standardDeviation
       ).toString();
+
+      if (count === this._expectedRollCount) {
+         // is never null.
+         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+         this._countValue.parentElement!.className = "table-success";
+         // is never null.
+         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+         this._standardDeviationValue.parentElement!.className =
+            standardDeviation < 250
+               ? "table-success"
+               : standardDeviation < 1000
+               ? "table-warning"
+               : "table-danger";
+      }
    };
 
    /**

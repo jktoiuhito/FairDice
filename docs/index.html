@@ -92,9 +92,15 @@
       <main class="flex-shrink-0 my-3">
          <div class="container text-center">
             <noscript
-               ><p class="alert alert-danger text-left">
-                  This app requires JavaScript in order to function
-               </p></noscript
+               ><div class="alert alert-danger text-left">
+                  <p>
+                     FairDice cannot work without JavaScript. Please enable it
+                     from your browsers settings.
+                  </p>
+                  <p>Worried about privacy? Check the <a href="./privacy.html">
+                     privacy disclaimer</a>
+                  </p>
+               </div></noscript
             >
             <p id="apple-error" class="alert alert-danger" hidden>
                FairDice does not work on Internet Explorer, desktop Safari or on
@@ -205,65 +211,44 @@
                      results than any physical dice ever could, while still
                      providing superior functionality.
                   </p>
-                  <h5>
-                     <a href="https://en.wikipedia.org/wiki/Mean"
-                        >Sample mean (${\bar {x}}$)</a
-                     >
-                  </h5>
-                  <p>TODO: What?</p>
-                  <p>TODO: Why?</p>
-                  <p>Expected mean: facecount / 2 + 0.5</p>
-                  <table class="table table-sm">
-                     <thead>
-                        <tr>
-                           <th scope="col">Deviation from expected mean</th>
-                           <th scope="col">Grade</th>
-                        </tr>
-                     </thead>
-                     <tbody>
-                        <tr class="table-success">
-                           <td>< 0.001</td>
-                           <td>Good</td>
-                        </tr>
-                        <tr class="table-warning">
-                           <td>< 0.01</td>
-                           <td>Mediocre</td>
-                        </tr>
-                        <tr class="table-danger">
-                           <td>>= 0.01</td>
-                           <td>Bad</td>
-                        </tr>
-                     </tbody>
-                  </table>
-                  <p>
-                     The formula for calculating the sample mean for a dice with
-                     a facecount of f is as follows:
-                  </p>
-                  <p>
-                     $${\bar {x}}_{f}=\frac{\sum_{i=1}^{f}Rollcount_{i}\cdot
-                     i}{f}$$
-                  </p>
-                  <h5>
+                  <h5>Calculations</h5>
+                  <p>Two values are calculated:
+                     <a href="https://en.wikipedia.org/wiki/Mean">sample mean</a>
+                     of the rolled values ${\bar {x}}_{values}$ and
                      <a href="https://en.wikipedia.org/wiki/Standard_deviation">
-                        Population standard deviation (σ)
-                     </a>
-                  </h5>
+                        population standard deviation</a> of faces frequencies
+                        $\sigma_{faces}$.</p>
                   <p>
-                     Population standard deviation (σ) is calculated from the
-                     amount of times a single value is rolled, and tells
-                     <b>how even the distribution of rolls is</b>. A very small
-                     σ implies that all values are rolled evenly, while a very
-                     high σ implies that some values are rolled noticeably more
-                     often than others. <b>Ideal σ is zero (0)</b>.
+                     Formulas are as follows. In all cases $f$ is the facecount
+                     of a dice and $r_{i}$ is the rollcount of a specific value
+                     $i$.
                   </p>
+                  <!-- expected (population) mean of values -->
+                  <p>$$\mu_{values}=\frac{f}{2}+0.5$$</p>
+                  <!-- sample mean of values -->
                   <p>
-                     The formula for calculating σ for a dice with a facecount
-                     of f is as follows:
+                     $${\bar {x}}_{values}=\frac{\sum_{i=1}^{f}r_{i}\cdot i}{\sum_{i=1}^{f}r_{i}}$$
                   </p>
+                  <!-- grading sample mean of values -->
+                  <p>$$Grade({\bar {x}}_{values})=
+                     \begin{cases}
+                      Good       & \text{if } \left|\mu_{values}-{\bar {x}}_{values}\right| < 0.001 \\
+                      Mediocre   & \text{if } \left|\mu_{values}-{\bar {x}}_{values}\right| < 0.01 \\
+                      Bad        & \text{otherwise}
+                     \end{cases}$$</p>
+                  <!-- expected (population) mean of faces -->
+                  <p>$$\mu_{faces}=100000$$</p>
+                  <!-- population standard deviation of faces -->
                   <p>
-                     $$σ_{f}=\sqrt{\frac{\sum_{i=1}^{f}\left(Rollcount_{i}-\left(\frac{f}{2}+0.5\
-                     \right)\right)^{2}}{f}}$$
+                     $$\sigma_{faces}=\sqrt{\frac{\sum_{i=1}^{f}\left(r_{i}-\mu_{faces}\right)^{2}}{f}}$$
                   </p>
+                  <!-- grading population standard deviation of faces -->
+                  <p>$$Grade(\sigma_{faces})=
+                     \begin{cases}
+                      Good       & \text{if } \sigma_{faces} < 250 \\
+                      Mediocre   & \text{if } \sigma_{faces} < 1000 \\
+                      Bad        & \text{otherwise}
+                     \end{cases}$$</p>
                   <div id="benchmark-modal-results-container"></div>
                </div>
                <div class="modal-footer">
