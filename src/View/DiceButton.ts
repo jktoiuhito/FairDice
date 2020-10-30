@@ -22,15 +22,15 @@ export default class DiceButton extends HTMLButtonElement {
       this.className = "btn btn-primary m-2";
       this.style.width = "4em";
 
-      const facecountElement = document.createElement("p");
-      facecountElement.className = "m-0 p-0";
-      facecountElement.textContent = "D" + this.Facecount.toString();
-
       this._rollcountElement = document.createElement("p");
       this._rollcountElement.className = "m-0 p-0 badge";
       this._rollcountElement.textContent = this._rollcount.toString();
 
-      this.append(facecountElement, this._rollcountElement);
+      const facecountElement = document.createElement("p");
+      facecountElement.className = "m-0 p-0";
+      facecountElement.textContent = "D" + this.Facecount.toString();
+
+      this.append(this._rollcountElement, facecountElement);
    }
 
    /**

@@ -48,7 +48,7 @@
          <div id="navbarContent" class="collapse navbar-collapse">
             <div class="navbar-nav">
                <span class="navbar-text mr-3"
-                  ><small>Version 1.0.0</small></span
+                  ><small>Version 1.0.1</small></span
                >
                <button
                   type="button"
@@ -83,8 +83,8 @@
       <main class="container">
          <noscript
             ><p class="alert alert-danger my-3">
-               FairDice requires JavaScript. Please enable it from your browsers
-               settings.
+               FairDice requires JavaScript support in order to function. Please
+               enable it from your browsers settings.
             </p></noscript
          >
          <h1 class="mt-3">Privacy</h1>
@@ -93,19 +93,26 @@
             <li>
                Does not communicate with any first- or third-party services over
                the network during its execution
+               <ul>
+                  <li>
+                     Sole expception is MathJax, which needs to re-layout the
+                     page when benchmark results are displayed, which causes it
+                     to refetch font-files from its CDN server
+                  </li>
+               </ul>
             </li>
             <li>Does not set or read any cookies</li>
             <li>Does not store or read any data to or from your device</li>
             <li>
-               Does not in any extent enumerate the capabilities of your browser
-               or device
+               Does not enumerate the capabilities of your browser or device
             </li>
             <li>
                Exists solely in the memory of your browser
                <ul>
                   <li>
                      Refreshing or closing the tab FairDice is running on
-                     permanently erases all of its data.
+                     permanently erases all of its runtime data, including
+                     benchmark results and stored rolls.
                   </li>
                </ul>
             </li>
@@ -123,7 +130,7 @@
             yourself.
          </p>
          <p>
-            The code for this app is served from servers managed by GitHub,
+            The code of FairDice is served from servers managed by GitHub,
             <a
                href="https://docs.github.com/en/free-pro-team@latest/github/site-policy/github-privacy-statement#github-pages"
                rel="external nofollow noopener noreferrer"

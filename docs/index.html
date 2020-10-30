@@ -67,7 +67,7 @@
          <div id="navbarContent" class="collapse navbar-collapse">
             <div class="navbar-nav">
                <span class="navbar-text mr-3"
-                  ><small>Version 1.0.0</small></span
+                  ><small>Version 1.0.1</small></span
                >
                <button
                   type="button"
@@ -104,8 +104,8 @@
             <noscript
                ><div class="alert alert-danger text-left">
                   <p>
-                     FairDice requires JavaScript. Please enable it from your
-                     browsers settings.
+                     FairDice requires JavaScript support in order to function.
+                     Please enable it from your browsers settings.
                   </p>
                   <p>Worried about privacy? Check the <a href="./privacy.html">
                      privacy disclaimer</a>
@@ -184,7 +184,7 @@
                </div>
                <div class="modal-body">
                   <p>
-                     Extreme fairness is one of the main goals of this app. As
+                     Extreme fairness is one of the main goals of FairDice. As
                      such a
                      <a
                         href="https://developer.mozilla.org/en-US/docs/Web/API/Crypto/getRandomValues"
@@ -245,26 +245,15 @@
                      </a> of faces rollcount distribution $\sigma_{faces}$.
                   </p>
                   <p>
-                     Formulas are as follows. $f$ is the facecount of a dice and
-                     $r_{i}$ is the amount of times a specific face $i$ has been
-                     rolled.
+                     If the CSPRNG is fair, ${\bar {x}}_{values}$ approaches the
+                     expected mean $\mu_{values}$ :
                   </p>
                   <!-- expected (population) mean of values -->
-                  <div class="overflow-auto">$$\mu_{values}=\frac{f}{2}+0.5$$</div>
+                  <div class="overflow-auto">$$\mu_{values}=\frac{facecount}{2}+0.5$$</div>
                   <!-- sample mean of values -->
                   <div class="overflow-auto">
-                     $${\bar {x}}_{values}=\frac{\sum_{i=1}^{f}r_{i}\cdot i}{\sum_{i=1}^{f}r_{i}}$$
+                     $${\bar {x}}_{values}=\frac{\sum_{i=1}^{facecount}rollcount_{i}\cdot i}{\sum_{i=1}^{facecount}rollcount_{i}}$$
                   </div>
-                  <!-- expected (population) mean of faces -->
-                  <div class="overflow-auto">$$\mu_{faces}=100000$$</div>
-                  <!-- population standard deviation of faces -->
-                  <div class="overflow-auto">
-                     $$\sigma_{faces}=\sqrt{\frac{\sum_{i=1}^{f}\left(r_{i}-\mu_{faces}\right)^{2}}{f}}$$
-                  </div>
-                  <p>
-                     If the CSPRNG is fair, ${\bar {x}}_{values}$ approaches
-                     $\mu_{values}$
-                  </p>
                   <!-- grading sample mean of values -->
                   <div class="overflow-auto">
                      $$Grade({\bar {x}}_{values})=
@@ -274,13 +263,22 @@
                      Bad        & \text{otherwise}
                      \end{cases}$$
                   </div>
+
+
                   <p>
                      However, ${\bar {x}}_{values}$ can be equal to $\mu_{values}$
-                     even if the distribution of values would be uneven (imagine
-                     a (reverse) U, V or W shaped distribution). A small
-                     $\sigma_{faces}$ tells us that the CSPRNG generates an even
-                     distribution of all values.
+                     even if the distribution of rolled faces would be uneven, for
+                     example when it is (reverse) U, V or W shaped. $\sigma_{faces}$
+                     indicates how much faces rollcounts deviate from the expected
+                     rollcount $\mu_{faces}$ and therefore the evenness of the
+                     distribution:
                   </p>
+                  <!-- expected (population) mean of faces -->
+                  <div class="overflow-auto">$$\mu_{faces}=100000$$</div>
+                  <!-- population standard deviation of faces -->
+                  <div class="overflow-auto">
+                     $$\sigma_{faces}=\sqrt{\frac{\sum_{i=1}^{facecount}\left(rollcount_{i}-\mu_{faces}\right)^{2}}{facecount}}$$
+                  </div>
                   <!-- grading population standard deviation of faces -->
                   <div class="overflow-auto">
                      $$Grade(\sigma_{faces})=
@@ -289,9 +287,9 @@
                         Mediocre   & \text{if } \sigma_{faces} &lt; 1000 \\
                         Bad        & \text{otherwise}
                         \end{cases}$$
-                     </div>
-                     <div id="benchmark-modal-results-container"></div>
                   </div>
+                  <div id="benchmark-modal-results-container"></div>
+               </div>
                   <div class="modal-footer">
                      <button
                      type="button"
