@@ -2,6 +2,8 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/jktoiuhito/fairdice/badge)](https://www.codefactor.io/repository/github/jktoiuhito/fairdice)
 
+![screenshot of FairDice running on desktop and mobile. a d20 and d4 have been rolled with values 12 and 4.](https://github.com/jktoiuhito/FairDice/blob/main/example.png)
+
 FairDice aspires to be a superior alternative to physical dice by offering extreme fairness and the capability to inspect your throw history. No more wondering if a dice is cursed, rethrowing when dice fall to the floor or trying to recall what the value of the last throw actually was.
 
 FairDice is a web-based app that runs in your browser, and can be used equally well in both mobile and desktop devices. Electron-based app for Android is planned to be published in the future.
